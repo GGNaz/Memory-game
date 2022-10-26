@@ -198,16 +198,17 @@ const App = () => {
   </div>
 </div> */}
  
-            <ReactCardFlip isFlipped={isClick} flipDirection="horizontal"><img style={{height:"200px", width: "200px"}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAADP0lEQVRoge3a36sWRRwG8M+bJxEyizAkMJIgqO66KVRCMIJAofoHzoV/RN2EVFJW1GUXGQRa2F0IUmRQiaf3oh9e1EWlRCh1IrLiJBT9oHO6mHl1Ob67M7s7e46GDwy77M488zz7/c7O7s5yFVcW1uJ5/IClVSrz2B+1dMZzq2hgeXm2j5H5SLK1D0lPbHMxMp0xuRqrjaSOazoQwjqMsa+DqCaMMVeYE5deiSWM8GYso8L9zZueQsmIzHTobB9ux44UeQuMcTN+Fe5O3wqG7s8laJtasAebcG2HtnVYxHr8gh+F1C06Nqel1p04gFdKdhTxIl7K0NEa04zABpzBgxkcI3yI96XH1KlYUjpao84IwcQZXJ/guK/Cc28hHYMTHMNxIccnOFjhOVg5vi7WfXcAHb0JJvXfwm14WBjIf8ayGI9twZEW/Ml6qZydNM6dL+o6eyJy1E2gpXVMJegSkTfwM87isShgFPfP4lysUywipQmGql/8WeuyxVBG3sOC9DvGBGsG0nEBXVOlbZktrKMXwU7NYv/BXmyutJmN505rjsqKGjmm2cjeKW3WCCZSUVlRIz9pNnJrpW71BaoalbrXihU1kjuwCSZOxP0Z6ahctkaqmMGrsc5XBXT0Juhi5C58XqkzLqCjN0GukdfxuDBmqh/+Zl1hY+QcPovbnNTL0tF3Zt+NT/BXot75yv4e4WVsPb7s2X82mq7EbukoTMrJGo4tiT5ydGShieBT+UaerLS7AffgKfwWz3/UQ0cWmgjOyzOxgI2xzdyyc4s4JHzM6KojC30j8i8eqbSZw+/CfPEy7i6gozdBaows4NE+nWfqKEKwCx8Ld60lId1OCvm/saFdaR3DExTC4PNIKVyHb/BQ5VjRC1h3JU7h65IdCS9m3+HGSt8pHRfQNSJH8XbHtnX4AO/gBeFDeSu0/TA2FtZGTsdjdwgpkb2OkcAGfCGskdxS6Xe5jkvQNiKLwp3pJmGN5A9lc/lvYX3ktYKcqM/NeeERvCRGOOzikl6rMdJl6Y2wNFb6tvy08OH7gQG4/z/zyCR9thWR0w3b47bXDwP75T+qD12e6WNkbTQz+ZVjNcr30USvn2quYqXxH8FKHjfjpyJlAAAAAElFTkSuQmCC"/>
+            <ReactCardFlip isFlipped={isClick} flipDirection="horizontal">
+            <img src="https://img.icons8.com/clouds/100/000000/help.png"/>
               <Box
-          p='40px'
-          color='white'
-          mt='4'
-          bg='teal.500'
-          rounded='md'
-          shadow='md'
+          // p='40px'
+          // color='white'
+          // mt='4'
+          // bg='teal.500'
+          // rounded='md'
+          // shadow='md'
           // className="flip-card-inner"
-        > likod</Box></ReactCardFlip>
+        > {isClick&&title}</Box></ReactCardFlip>
       
       
             
