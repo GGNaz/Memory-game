@@ -1,8 +1,9 @@
 // import logo from './logo.svg';
-// import './App.css';
-import { Grid, GridItem } from "@chakra-ui/react";
+import './App.css';
+import { Box, Grid, GridItem } from "@chakra-ui/react";
 import { Container } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import ReactCardFlip from "react-card-flip";
 const App = () => {
   const [loadCards, setLoadCards] = useState([]);
   const [tempStore, setTempStore] = useState([]);
@@ -56,13 +57,32 @@ const App = () => {
         );
         if (findIfExist.length >= 2) {
           arr.splice(randomLetters, 1);
-          const newrandomLetters = Math.floor(Math.random() * arr.length);
+          // const newrandomLetters = Math.floor(Math.random() * arr.length);
+         let ctr = 0
+         let randomNum = 0
+          do {
+            const newrandomLetters = Math.floor(Math.random() * arr.length);
+            const findAgain = toLoad.filter(
+              (item) => item.title === arr[newrandomLetters]
+            );
+            if(findAgain.length>=2){
+              arr.splice(newrandomLetters, 1);
+            }else{
+              randomNum = newrandomLetters
+            }
+           
+            ctr = findAgain.length
+            // i = i + 1;
+            // result = result + i;
+          } while (ctr >=2);
+
           const params = {
-            title: arr[newrandomLetters],
+            title: arr[randomNum],
             isClick: false,
           };
 
           toLoad.push(params);
+        
         } else {
           const params = {
             title: arr[randomLetters],
@@ -90,20 +110,26 @@ const App = () => {
 
     if (tempStore?.length >= 2) {
       console.log("click ctr set 0");
+      console.log("asdasdas",tempStore[0][0])
       tempStore.map((data) => {
-        const getIndex = loadCards.findIndex((item) => item.title === data);
-        if (getIndex >= 0) {
-          makeCopy[getIndex].isClick = false;
-          setLoadCards(makeCopy);
-        }
+       if(tempStore[0][0] !== tempStore[1][0]){
+        makeCopy[data[1]].isClick = false;
+        setLoadCards(makeCopy);
+       }
       });
-      console.log("loadCards", loadCards);
-      setTempStore([]);
+
+      // if(tempStore[0][0] === tempStore[1][0]){
+      //   // setTempStore([])
+      // }
+      setTempStore([])
+      // console.log("loadCards", loadCards);
+
+    
       // return clickCounter = 0
     } else {
       makeCopy[index].isClick = true;
       setLoadCards(makeCopy);
-      setTempStore([...tempStore, title]);
+      setTempStore([...tempStore, [title,index]]);
 
       // return  toLoad[index].isClick = true
 
@@ -139,6 +165,7 @@ const App = () => {
 
     return array;
   }
+  
 
   return (
     <Grid templateColumns="repeat(5, 1fr)" gap={6} p="20">
@@ -147,15 +174,43 @@ const App = () => {
           const { title, isClick } = data;
           return (
             <GridItem
+            // style={{transform: `rotateY(180deg)`, transition: `transform 0.8s`,
+            // transformStyle:` preserve-3d`}}
+            // className="flip-card"
               w="100%"
               h="200"
-              bg="blue.500"
+              // bg="blue.500"
               cursor="pointer"
               onClick={() => selectCard(title, index)}
-              color="white"
+              color="red"
               fontSize={50}
             >
-              {isClick && title}
+              {/* <div class="flip-card">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <img src="img_avatar.png" alt="Avatar" style={{width:"300px",height:"300px"}}/>
+    </div>
+    <div class="flip-card-back">
+      <h1>John Doe</h1>
+      <p>Architect & Engineer</p>
+      <p>We love that guy</p>
+    </div>
+  </div>
+</div> */}
+ 
+            <ReactCardFlip isFlipped={isClick} flipDirection="horizontal"><img style={{height:"200px", width: "200px"}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAADP0lEQVRoge3a36sWRRwG8M+bJxEyizAkMJIgqO66KVRCMIJAofoHzoV/RN2EVFJW1GUXGQRa2F0IUmRQiaf3oh9e1EWlRCh1IrLiJBT9oHO6mHl1Ob67M7s7e46GDwy77M488zz7/c7O7s5yFVcW1uJ5/IClVSrz2B+1dMZzq2hgeXm2j5H5SLK1D0lPbHMxMp0xuRqrjaSOazoQwjqMsa+DqCaMMVeYE5deiSWM8GYso8L9zZueQsmIzHTobB9ux44UeQuMcTN+Fe5O3wqG7s8laJtasAebcG2HtnVYxHr8gh+F1C06Nqel1p04gFdKdhTxIl7K0NEa04zABpzBgxkcI3yI96XH1KlYUjpao84IwcQZXJ/guK/Cc28hHYMTHMNxIccnOFjhOVg5vi7WfXcAHb0JJvXfwm14WBjIf8ayGI9twZEW/Ml6qZydNM6dL+o6eyJy1E2gpXVMJegSkTfwM87isShgFPfP4lysUywipQmGql/8WeuyxVBG3sOC9DvGBGsG0nEBXVOlbZktrKMXwU7NYv/BXmyutJmN505rjsqKGjmm2cjeKW3WCCZSUVlRIz9pNnJrpW71BaoalbrXihU1kjuwCSZOxP0Z6ahctkaqmMGrsc5XBXT0Juhi5C58XqkzLqCjN0GukdfxuDBmqh/+Zl1hY+QcPovbnNTL0tF3Zt+NT/BXot75yv4e4WVsPb7s2X82mq7EbukoTMrJGo4tiT5ydGShieBT+UaerLS7AffgKfwWz3/UQ0cWmgjOyzOxgI2xzdyyc4s4JHzM6KojC30j8i8eqbSZw+/CfPEy7i6gozdBaows4NE+nWfqKEKwCx8Ld60lId1OCvm/saFdaR3DExTC4PNIKVyHb/BQ5VjRC1h3JU7h65IdCS9m3+HGSt8pHRfQNSJH8XbHtnX4AO/gBeFDeSu0/TA2FtZGTsdjdwgpkb2OkcAGfCGskdxS6Xe5jkvQNiKLwp3pJmGN5A9lc/lvYX3ktYKcqM/NeeERvCRGOOzikl6rMdJl6Y2wNFb6tvy08OH7gQG4/z/zyCR9thWR0w3b47bXDwP75T+qD12e6WNkbTQz+ZVjNcr30USvn2quYqXxH8FKHjfjpyJlAAAAAElFTkSuQmCC"/>
+              <Box
+          p='40px'
+          color='white'
+          mt='4'
+          bg='teal.500'
+          rounded='md'
+          shadow='md'
+          // className="flip-card-inner"
+        > likod</Box></ReactCardFlip>
+      
+      
+            
             </GridItem>
           );
         })}
