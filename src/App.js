@@ -1,12 +1,28 @@
 // import logo from './logo.svg';
-import './App.css';
-import { Box, Grid, GridItem } from "@chakra-ui/react";
+import "./App.css";
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { Container } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import ReactCardFlip from "react-card-flip";
+import GameTimer from "./Components/GameTimer";
+
 const App = () => {
   const [loadCards, setLoadCards] = useState([]);
   const [tempStore, setTempStore] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
   let x = 10;
 
   // getRandomInt(x)
@@ -32,49 +48,69 @@ const App = () => {
         });
       }
       let arr = [
+        {
+          name: "A",
+          card: "https://img.icons8.com/office/200/000000/corgi.png",
+        },
+        {
+          name: "B",
+          card: "https://img.icons8.com/office/200/000000/clown-fish.png",
+        },
+        {
+          name: "C",
+          card: "https://img.icons8.com/office/200/000000/chicken.png",
+        },
+        {
+          name: "D",
+          card: "https://img.icons8.com/office/200/000000/bumblebee.png",
+        },
+        {
+          name: "E",
+          card: "https://img.icons8.com/office/200/000000/pig.png",
+        },
         // {
-        //   name: "A",
-        //   card: (
-        //     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAB40lEQVRoge2aP0vDQBiHH0WqUBA3QcFvoLsVtINLwUURFbHufhBt/RQFu1hcFdFZd11dbRUXdREXqw694jWmppd7e0nlHnhJcgnv/X65/Ol7DXgGiwxwCDwAXwlFAygpLbEpJ2ggGAc2RhoqybxNEkty/IxMbNpnI2kidQw7EtIrRyrEcTkiWeBFRdZUR5pGZA24Aq6BVenkLkfkEtgANoELaR2ujEwBH1p/TWDaREdaLq1toAIMqagAW5IduBqRW2BR214CbiR1+PeIa7yRtOGNpA1vpAt6RXkPFLR9BaBOq64oY1nxmWL6HglWlO/ALDCn1vV95T7qsE7Qrij1OAZqIe0mFV+kjhGDZL0wGtKW73LsmGTH0vfIXUjbpIpejo2NtJGawbEnwn3/iek9Mk7ryRQ1tfMETPRRh0iCZTqLpGA0gRUHOkQS7BJu5hPYc6hDJEEeeNRyvALrCegQSTANnAHnwEyCOnyF6BxvJG14I2nD1EjURFpimBqpAkVtu6jaUk/w+R012exKh0iC9vT/Br+n//tFXyrEKrBDa9Z8IC4rCD8TWeBZRfAvMpc6OogzIm/AqbY+EPybH40PapkTkROPBbW0+mCghP2nF1Kxb2Mko8yETby5iroy4XSK1WPLNwvJMpJWMQorAAAAAElFTkSuQmCC" />
-        //   ),
+        //   name: "F",
+        //   card: "https://img.icons8.com/office/200/000000/dolphin.png",
         // },
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
+        // {
+        //   name: "G",
+        //   card: "https://img.icons8.com/office/200/000000/elephant.png",
+        // },
+        // {
+        //   name: "H",
+        //   card: "https://img.icons8.com/office/200/000000/snail.png",
+        // },
+       
       ];
       // shuffle(arr);
       console.log("arr", arr.length);
-      console.log("arrasdasd", arr);
 
       for (let i = 0; i < 10; i++) {
-        console.log("i", i);
         const randomLetters = Math.floor(Math.random() * arr.length);
-        console.log("na shuffle", arr[randomLetters]);
+
         const findIfExist = toLoad.filter(
-          (item) => item.title === arr[randomLetters]
+          (item) => item.title.name === arr[randomLetters].name
         );
         if (findIfExist.length >= 2) {
           arr.splice(randomLetters, 1);
           // const newrandomLetters = Math.floor(Math.random() * arr.length);
-         let ctr = 0
-         let randomNum = 0
+          let ctr = 0;
+          let randomNum = 0;
           do {
             const newrandomLetters = Math.floor(Math.random() * arr.length);
             const findAgain = toLoad.filter(
-              (item) => item.title === arr[newrandomLetters]
+              (item) => item.title.name === arr[newrandomLetters].name
             );
-            if(findAgain.length>=2){
+            if (findAgain.length >= 2) {
               arr.splice(newrandomLetters, 1);
-            }else{
-              randomNum = newrandomLetters
+            } else {
+              randomNum = newrandomLetters;
             }
-           
-            ctr = findAgain.length
+
+            ctr = findAgain.length;
             // i = i + 1;
             // result = result + i;
-          } while (ctr >=2);
+          } while (ctr >= 2);
 
           const params = {
             title: arr[randomNum],
@@ -82,7 +118,6 @@ const App = () => {
           };
 
           toLoad.push(params);
-        
         } else {
           const params = {
             title: arr[randomLetters],
@@ -103,34 +138,31 @@ const App = () => {
     generateCard();
   }, []);
 
-  // let clickCounter = 0;
-
   const selectCard = (title, index) => {
     let makeCopy = [...loadCards];
 
     if (tempStore?.length >= 2) {
       console.log("click ctr set 0");
-      console.log("asdasdas",tempStore[0][0])
+      console.log("asdasdas", tempStore[0][0]);
       tempStore.map((data) => {
-       if(tempStore[0][0] !== tempStore[1][0]){
-        makeCopy[data[1]].isClick = false;
-        setLoadCards(makeCopy);
-       }
+        if (tempStore[0][0] !== tempStore[1][0]) {
+          makeCopy[data[1]].isClick = false;
+          setLoadCards(makeCopy);
+        }
       });
 
       // if(tempStore[0][0] === tempStore[1][0]){
       //   // setTempStore([])
       // }
-      setTempStore([])
+      setTempStore([]);
       // console.log("loadCards", loadCards);
 
-    
       // return clickCounter = 0
     } else {
       makeCopy[index].isClick = true;
       setLoadCards(makeCopy);
-      setTempStore([...tempStore, [title,index]]);
-
+      setTempStore([...tempStore, [title, index]]);
+      return VerticallyCenter()
       // return  toLoad[index].isClick = true
 
       // return clickCounter = clickCounter +1;
@@ -165,72 +197,120 @@ const App = () => {
 
     return array;
   }
-  
+
+  function VerticallyCenter() {
+    let checkIfWin = 0;
+   
+
+    loadCards?.map((data, i) => {
+      if (data.isClick === true) {
+        checkIfWin = checkIfWin + 1;
+      }
+      if (checkIfWin === loadCards?.length && loadCards?.length === i + 1) {
+        alert("YOU WIN MADA FAKAH");
+        // return win = true
+      }
+    });
+    // setOpenModal(win);
+    console.log("checkIfWin", checkIfWin);
+
+    // return (
+    //   <>
+    //     {/* <Button onClick={() => setOpenModal(true)}>Trigger modal</Button>
+    //      */}
+    //     <Modal
+    //       onClose={()=> setOpenModal(false)}
+    //       isOpen={openModal}
+    //       isCentered
+    //     >
+    //       <ModalOverlay />
+    //       <ModalContent>
+    //         <ModalHeader>Congratulations</ModalHeader>
+    //         <ModalCloseButton />
+    //         <ModalBody>You win! Wanna play again?</ModalBody>
+    //         <ModalFooter>
+    //           {/* <Button onClick={onClose}>No</Button> */}
+    //           <Button onClick={false}>Yes</Button>
+    //         </ModalFooter>
+    //       </ModalContent>
+    //     </Modal>
+    //   </>
+    // );
+  }
+
+  const alertModal = () => {
+    return  <Modal
+          onClose={()=> setOpenModal(false)}
+          isOpen={openModal}
+          isCentered
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Congratulations</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>You win! Wanna play again?</ModalBody>
+            <ModalFooter>
+              {/* <Button onClick={onClose}>No</Button> */}
+              <Button onClick={false}>Yes</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+  }
+
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + 60);
 
   return (
-    <Grid templateColumns="repeat(5, 1fr)" gap={6} p="20">
-      {loadCards?.length > 0 &&
-        loadCards.map((data, index) => {
-          const { title, isClick } = data;
-          return (
-            <GridItem
-            // style={{transform: `rotateY(180deg)`, transition: `transform 0.8s`,
-            // transformStyle:` preserve-3d`}}
-            // className="flip-card"
-              w="100%"
-              h="200"
-              // bg="blue.500"
-              cursor="pointer"
-              onClick={() => selectCard(title, index)}
-              color="red"
-              fontSize={50}
-            >
-              {/* <div class="flip-card">
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-      <img src="img_avatar.png" alt="Avatar" style={{width:"300px",height:"300px"}}/>
-    </div>
-    <div class="flip-card-back">
-      <h1>John Doe</h1>
-      <p>Architect & Engineer</p>
-      <p>We love that guy</p>
-    </div>
-  </div>
-</div> */}
- 
-            <ReactCardFlip isFlipped={isClick} flipDirection="horizontal">
-            <img src="https://img.icons8.com/clouds/100/000000/help.png"/>
-              <Box
-          // p='40px'
-          // color='white'
-          // mt='4'
-          // bg='teal.500'
-          // rounded='md'
-          // shadow='md'
-          // className="flip-card-inner"
-        > {isClick&&title}</Box></ReactCardFlip>
-      
-      
+    <>
+    {alertModal()}
+      <GameTimer expiryTimestamp={time} />
+      <Grid templateColumns="repeat(1, 1fr)">
+      <GridItem
+               
+                w="100%"
+                h="200"
+                // bg="blue.500"
             
-            </GridItem>
-          );
-        })}
+                color="red"
+                fontSize={50}
+              >
+        <label>GAME FOR FUCKING BRAIN</label>
+      </GridItem>
+      </Grid>
+      <Grid templateColumns="repeat(5, 1fr)" gap={6} p="20">
+    
+        {loadCards?.length > 0 &&
+          loadCards.map((data, index) => {
+            const { title, isClick } = data;
+            return (
+              <GridItem
+                // style={{transform: `rotateY(180deg)`, transition: `transform 0.8s`,
+                // transformStyle:` preserve-3d`}}
+                // className="flip-card"
+                w="100%"
+                h="200"
+                // bg="blue.500"
+                cursor="pointer"
+                onClick={() => selectCard(title, index)}
+                color="red"
+                fontSize={50}
+              >
+            
+                <ReactCardFlip isFlipped={isClick} flipDirection="horizontal">
+                  <img src="https://img.icons8.com/plasticine/400/000000/help.png" />
+                  {}
+                  {isClick && <img alt={title.name} src={title.card} />}
+                  {/* <Box
+        
+        > {isClick&&title}</Box> */}
+                </ReactCardFlip>
+              </GridItem>
+            );
+          })}
 
-      {/* <GridItem w='100%' h='200' bg='blue.500' cursor="pointer">B</GridItem>
-     <GridItem w='100%' h='200' bg='blue.500' cursor="pointer">A</GridItem>
-     <GridItem w='100%' h='200' bg='blue.500' cursor="pointer">B</GridItem> */}
-      {/* <GridItem w='100%' h='10' bg='blue.500' />
-    <GridItem w='100%' h='10' bg='blue.500' />
-    <GridItem w='100%' h='10' bg='blue.500' />
-    <GridItem w='100%' h='10' bg='blue.500' />
-    <GridItem w='100%' h='10' bg='blue.500' />
-    <GridItem w='100%' h='10' bg='blue.500' />
-    <GridItem w='100%' h='10' bg='blue.500' />
-    <GridItem w='100%' h='10' bg='blue.500' />
-    <GridItem w='100%' h='10' bg='blue.500' />
-    <GridItem w='100%' h='10' bg='blue.500' />
-    <GridItem w='100%' h='10' bg='blue.500' /> */}
-    </Grid>
+      
+      </Grid>
+    </>
   );
 };
 
