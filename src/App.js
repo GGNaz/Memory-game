@@ -1,23 +1,15 @@
 // import logo from './logo.svg';
 import "./App.css";
-import {
-  Box,
-  Button,
-  Grid,
-  GridItem,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { Container } from "@chakra-ui/react";
+
 import React, { useEffect, useState } from "react";
 import ReactCardFlip from "react-card-flip";
 import GameTimer from "./Components/GameTimer";
+import mlbbLogo from "./Assets/mlbb.jpg"
+import mlbbIcon from "./Assets/mlbb-1.png"
+import fanny from "./Assets/fanny.jpg";
+import gusion from "./Assets/gusion.jpg";
+import diggie from "./Assets/diggie.jpg";
+import nata from "./Assets/nata.jpg";
 
 const App = () => {
   const [loadCards, setLoadCards] = useState([]);
@@ -50,23 +42,23 @@ const App = () => {
       let arr = [
         {
           name: "A",
-          card: "https://img.icons8.com/office/200/000000/corgi.png",
+          card:( <img src={fanny} alt="fanny" className="h-50 w-full" />),
         },
         {
           name: "B",
-          card: "https://img.icons8.com/office/200/000000/clown-fish.png",
+          card: ( <img src={gusion} alt="gusion" className="h-50 w-full" />),
         },
         {
           name: "C",
-          card: "https://img.icons8.com/office/200/000000/chicken.png",
+          card: ( <img src={diggie} alt="diggie" className="h-50 w-full" />),
         },
         {
           name: "D",
-          card: "https://img.icons8.com/office/200/000000/bumblebee.png",
+          card: ( <img src={nata} alt="nata" className="h-50 w-full" />),
         },
         {
           name: "E",
-          card: "https://img.icons8.com/office/200/000000/pig.png",
+          card: ( <img src={fanny} alt="fanny" className="h-50 w-full" />),
         },
         // {
         //   name: "F",
@@ -80,7 +72,7 @@ const App = () => {
         //   name: "H",
         //   card: "https://img.icons8.com/office/200/000000/snail.png",
         // },
-       
+
       ];
       // shuffle(arr);
       console.log("arr", arr.length);
@@ -200,7 +192,7 @@ const App = () => {
 
   function VerticallyCenter() {
     let checkIfWin = 0;
-   
+
 
     loadCards?.map((data, i) => {
       if (data.isClick === true) {
@@ -239,78 +231,39 @@ const App = () => {
   }
 
   const alertModal = () => {
-    return  <Modal
-          onClose={()=> setOpenModal(false)}
-          isOpen={openModal}
-          isCentered
-        >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Congratulations</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>You win! Wanna play again?</ModalBody>
-            <ModalFooter>
-              {/* <Button onClick={onClose}>No</Button> */}
-              <Button onClick={false}>Yes</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+
   }
 
   const time = new Date();
   time.setSeconds(time.getSeconds() + 60);
 
   return (
-    <>
-    {alertModal()}
-      <GameTimer expiryTimestamp={time} />
-      <Grid templateColumns="repeat(1, 1fr)">
-      <GridItem
-               
-                w="100%"
-                h="200"
-                // bg="blue.500"
-            
-                color="red"
-                fontSize={50}
-              >
-        <label>GAME FOR FUCKING BRAIN</label>
-      </GridItem>
-      </Grid>
-      <Grid templateColumns="repeat(5, 1fr)" gap={6} p="20">
-    
+    <div className="bg-slate-700 min-h-full">
+      {alertModal()}
+      {/* <GameTimer expiryTimestamp={time} /> */}
+      <div className="flex flex-row justify-center "><img style={{ height: "200px" }} src={mlbbLogo} alt="mlbblogo" /></div>
+      <div className="grid grid-cols-5 gap-4">
         {loadCards?.length > 0 &&
           loadCards.map((data, index) => {
             const { title, isClick } = data;
             return (
-              <GridItem
-                // style={{transform: `rotateY(180deg)`, transition: `transform 0.8s`,
-                // transformStyle:` preserve-3d`}}
-                // className="flip-card"
-                w="100%"
-                h="200"
-                // bg="blue.500"
-                cursor="pointer"
+              <div
+              
                 onClick={() => selectCard(title, index)}
-                color="red"
-                fontSize={50}
               >
-            
+
                 <ReactCardFlip isFlipped={isClick} flipDirection="horizontal">
-                  <img src="https://img.icons8.com/plasticine/400/000000/help.png" />
-                  {}
-                  {isClick && <img alt={title.name} src={title.card} />}
-                  {/* <Box
-        
-        > {isClick&&title}</Box> */}
+                  <div className="h-50 w-full border"> <img src={mlbbIcon} alt="cardIcon" /></div>
+                 
+             
+                  {isClick && <div key={index} className="h-50 w-full border">{title.card}</div>}
+
                 </ReactCardFlip>
-              </GridItem>
+              </div>
             );
           })}
-
-      
-      </Grid>
-    </>
+      </div>
+    </div>
   );
 };
 
